@@ -19,6 +19,8 @@ int tick = 0;
 bool lights_on = true;
 bool noclip = false;
 
+float position[] = {1.0f, 1.0f, 0.3f, 0.0f};
+
 
 //TESTING THINGS HERE--------------------------
 float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -51,7 +53,7 @@ GLfloat blue_val[] = {0,0,1,1};
 //GLfloat no_shininess = 0.0f;
 
 Camera camera;
-Cube shape1(8,0,0,-35);
+Cube shape1(8,-15,0,-35);
 Cube shape2(30,0,0,-50);
 //Cube shape3(12);
 //Cube shape4(4);
@@ -63,12 +65,20 @@ double oldz = camera.eyez;
 void drawLight(Cube cube){
 	glTranslatef(cube.transX, cube.transY, cube.transZ);
 	
+	
+	/*
 	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
     glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+	*/
 	
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_color);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
+        glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
 	
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
@@ -190,6 +200,7 @@ void drawCube(Cube cube){
 
 void generateView(){
 	glMatrixMode(GL_MODELVIEW);
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
@@ -198,6 +209,7 @@ void generateView(){
 	gluLookAt(camera.eyex, camera.eyey, camera.eyez,
 	camera.centerx, camera.centery, camera.centerz,
 	camera.upx, camera.upy, camera.upz);
+	//gluPerspective( 90.0, 1.0, 1.0, 200.0 );
 	
 	/*
 	glPushMatrix();
@@ -214,6 +226,19 @@ void generateView(){
 	
 	
 	*/
+	/*
+	glPushMatrix();
+        glTranslatef(-15.0f, 0.0f, -35.0f);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_color);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
+        glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+        gluSphere(quadric, 12.0f, 128, 128);
+    glPopMatrix();
+	*/
+	
+	
 	
 	//glPushMatrix();
 	
@@ -509,6 +534,8 @@ void idleFunction(){
 	position_val[1] = camera.eyey;
 	position_val[2] = camera.eyez;
 	
+	
+	
 	generateView();
 }
 
@@ -516,7 +543,7 @@ void initLighting(){
 	float ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
     float diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
     float specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    float position[] = {1.0f, 1.0f, 0.3f, 0.0f};
+    
    
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -527,10 +554,11 @@ void initLighting(){
     int viewpoint = 0;
 	
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, model_ambient);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, viewpoint);
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);
+	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, viewpoint);
+	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, model_two_side);
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
+    glEnable(GL_RESCALE_NORMAL);
 	/*
 	glShadeModel(GL_SMOOTH);
 	glClearDepth(1);
