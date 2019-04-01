@@ -5,7 +5,7 @@
 Camera::Camera(){
 	//initial camera values
 	eyex = 0;
-	eyey = 0;
+	eyey = 5;
 	eyez = 1;
 	centerx = 0;
 	centery = 0;

@@ -19,19 +19,19 @@ int tick = 0;
 bool lights_on = true;
 bool noclip = false;
 
-float position[] = {1.0f, 1.0f, 0.3f, 0.0f};
+
 
 
 //TESTING THINGS HERE--------------------------
 float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
-float mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
-float mat_ambient_color[] = {0.8f, 0.8f, 0.2f, 1.0f};
+float mat_ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
+float mat_ambient_color[] = {0.1f, 0.1f, 0.025f, 1.0f};
 float mat_diffuse[] = {0.1f, 0.5f, 0.8f, 1.0f};
 float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 float no_shininess = 0.0f;
 float low_shininess = 5.0f;
 float high_shininess = 100.0f;
-float mat_emission[] = {0.3f, 0.2f, 0.2f, 0.0f};
+float mat_emission[] = {0.6f, 0.6f, 0.6f, 0.0f};
 GLUquadric* quadric = gluNewQuadric();
 //----------------------------------------------
 
@@ -53,14 +53,46 @@ GLfloat blue_val[] = {0,0,1,1};
 //GLfloat no_shininess = 0.0f;
 
 Camera camera;
-Cube shape1(8,-15,0,-35);
-Cube shape2(30,0,0,-50);
-//Cube shape3(12);
-//Cube shape4(4);
+float position[] = {25.0f, 35.0f, -20.0f, 1.0f};
+Cube shape2(100,50,-100,50);
+Cube house1(30,-15,0,-15);
+Cube house2(30,45,0,-15);
+Cube house3(30,-15,0,45);
+Cube house4(30,45,0,45);
+
+Cube h1window1(8,-14.7,5,-19);
+Cube h1window2(8,-14.7,5,-33);
+Cube h1window3(8,-14.7,17,-19);
+Cube h1window4(8,-14.7,17,-33);
+
+Cube h2window1(8,-14.7,5,41);
+Cube h2window2(8,-14.7,5,27);
+Cube h2window3(8,-14.7,17,41);
+Cube h2window4(8,-14.7,17,27);
+
+Cube h3window1(8,22.7,5,-19);
+Cube h3window2(8,22.7,5,-33);
+Cube h3window3(8,22.7,17,-19);
+Cube h3window4(8,22.7,17,-33);
+
+Cube h4window1(8,22.7,5,41);
+Cube h4window2(8,22.7,5,27);
+Cube h4window3(8,22.7,17,41);
+Cube h4window4(8,22.7,17,27);
+
+
+Cube collision_shapes[] = {shape2, house1, house2, house3, house4};
+Cube windows[] = 
+{h1window1, h1window2, h1window3, h1window4,
+h2window1, h2window2, h2window3, h2window4,
+h3window1, h3window2, h3window3, h3window4,
+h4window1, h4window2, h4window3, h4window4};
+
 
 double oldx = camera.eyex;
 double oldy = camera.eyey;
 double oldz = camera.eyez;
+
 
 void drawLight(Cube cube){
 	glTranslatef(cube.transX, cube.transY, cube.transZ);
@@ -74,12 +106,13 @@ void drawLight(Cube cube){
     glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
 	*/
 	
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_color);
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-        glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
-        glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+	//glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
+    glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+	//gluSphere(quadric, 6.0f, 128, 128);
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
 	
@@ -100,43 +133,46 @@ void drawLight(Cube cube){
 	
 	//Draw the cube here
 	//Begins at forward upper right corner
+	
+	
+	
 	glBegin(GL_TRIANGLES); //setting all color values to white for now
-		glColor3f(0.95,0.4,0); //red, top
+		glColor3f(1,1,1); //red, top
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(0.95,0.4,0); //green, right
+		glColor3f(1,1,1); //green, right
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(0.95,0.4,0); //blue, front
+		glColor3f(1,1,1); //blue, front
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
-		glColor3f(0.95,0.4,0); //orange, bottom
+		glColor3f(1,1,1); //orange, bottom
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
-		glColor3f(0.95,0.4,0); //cyan, left
+		glColor3f(1,1,1); //cyan, left
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
-		glColor3f(0.95,0.4,0); //purple, back
+		glColor3f(1,1,1); //purple, back
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
@@ -144,11 +180,17 @@ void drawLight(Cube cube){
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 	glEnd();
+	
 }
 
 void drawCube(Cube cube){
 	
 	glTranslatef(cube.transX, cube.transY, cube.transZ);
+	
+	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+    glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
 	
 	//Draw the cube here
 	//Begins at forward upper right corner
@@ -189,6 +231,63 @@ void drawCube(Cube cube){
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 		glColor3f(0,0,0); //purple, back
+			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
+			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
+			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
+			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
+			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
+			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
+	glEnd();
+}
+
+void drawCube2(Cube cube){
+	
+	glTranslatef(cube.transX, cube.transY, cube.transZ);
+	
+	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+    glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
+	
+	//Draw the cube here
+	//Begins at forward upper right corner
+	glBegin(GL_TRIANGLES); //setting all color values to white for now
+		glColor3f(1,1,1); //red, top
+			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
+			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
+			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
+			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
+			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
+			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
+		glColor3f(1,1,1); //green, right
+			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
+			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
+			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
+			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
+			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
+			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
+		glColor3f(1,1,1); //blue, front
+			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
+			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
+			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
+			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
+			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
+			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
+		glColor3f(1,1,1); //orange, bottom
+			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
+			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
+			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
+			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
+			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
+			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
+		glColor3f(1,1,1); //cyan, left
+			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
+			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
+			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
+			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
+			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
+			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
+		glColor3f(1,1,1); //purple, back
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
@@ -242,12 +341,42 @@ void generateView(){
 	
 	//glPushMatrix();
 	
+	/*
 	glPushMatrix();
 	drawLight(shape1);
 	glPopMatrix();
+	
+	
+	
+	glPushMatrix();
+	drawCube2(shape3);
+	glPopMatrix();
+	
+	glPushMatrix();
+	drawCube2(shape4);
+	glPopMatrix();
+	*/
+	
+	/*
 	glPushMatrix();
 	drawCube(shape2);
 	glPopMatrix();
+	
+	glPushMatrix();
+	drawCube(house1);
+	glPopMatrix();
+	*/
+	
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		glPushMatrix();
+		drawCube(collision_shapes[i]);
+		glPopMatrix();
+	}
+	for(int i = 0; i < (sizeof(windows) / sizeof(windows[0])); i++){
+		glPushMatrix();
+		drawLight(windows[i]);
+		glPopMatrix();
+	}
 	
 	glEnd();
 	
@@ -260,105 +389,117 @@ void generateView(){
 
 bool checkCenterCollision(Cube cube){
 	bool colliding = false;
-	if((camera.centerx > cube.xmin && camera.centerx < cube.xmax &&
-		camera.centery > cube.ymin && camera.centery < cube.ymax &&
-		camera.centerz > cube.zmin && camera.centerz < cube.zmax)){
-		colliding = true;
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		if((camera.centerx > cube.xmin && camera.centerx < cube.xmax &&
+			camera.centery > cube.ymin && camera.centery < cube.ymax &&
+			camera.centerz > cube.zmin && camera.centerz < cube.zmax)){
+			colliding = true;
+		}
 	}
 	return colliding;
 }
 
 bool checkEyeCollision(Cube cube){
 	bool colliding = false;
-	if((camera.eyex > cube.xmin && camera.eyex < cube.xmax &&
-		camera.eyey > cube.ymin && camera.eyey < cube.ymax &&
-		camera.eyez > cube.zmin && camera.eyez < cube.zmax)){
-		colliding = true;
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		if((camera.eyex > cube.xmin && camera.eyex < cube.xmax &&
+			camera.eyey > cube.ymin && camera.eyey < cube.ymax &&
+			camera.eyez > cube.zmin && camera.eyez < cube.zmax)){
+			colliding = true;
+		}
 	}
 	return colliding;
 }
 
-bool checkForwardCollision(Cube cube){
+bool checkForwardCollision(Cube cube[]){
 	bool colliding = false;
-	if((checkCenterCollision(cube)) && (checkEyeCollision(cube))){
-		colliding = true;
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		if((checkCenterCollision(cube[i])) && (checkEyeCollision(cube[i]))){
+			colliding = true;
+		}
 	}
 	//std::cout<<"Collision: "<<colliding<<" yaw: "<<yaw<<std::endl;
 	return colliding;
 }
 
-bool checkBackwardCollision(Cube cube){
+bool checkBackwardCollision(Cube cube[]){
 	bool colliding = false;
-	if(
-	((2 * camera.eyex - camera.centerx) > (cube.xmin)) &&
-	((2 * camera.eyex - camera.centerx) < (cube.xmax)) &&
-	((2 * camera.eyey - camera.centery) > (cube.ymin)) &&
-	((2 * camera.eyey - camera.centery) < (cube.ymax)) &&
-	((2 * camera.eyez - camera.centerz) > (cube.zmin)) &&
-	((2 * camera.eyez - camera.centerz) < (cube.zmax))
-	){
-		colliding = true;
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		if(
+		((2 * camera.eyex - camera.centerx) > (cube[i].xmin)) &&
+		((2 * camera.eyex - camera.centerx) < (cube[i].xmax)) &&
+		((2 * camera.eyey - camera.centery) > (cube[i].ymin)) &&
+		((2 * camera.eyey - camera.centery) < (cube[i].ymax)) &&
+		((2 * camera.eyez - camera.centerz) > (cube[i].zmin)) &&
+		((2 * camera.eyez - camera.centerz) < (cube[i].zmax))
+		){
+			colliding = true;
+		}
 	}
 	//std::cout<<"Collision: "<<colliding<<" yaw: "<<yaw<<std::endl;
 	return colliding;
 }
 
-bool checkLeftCollision(Cube cube){
+bool checkLeftCollision(Cube cube[]){
 	bool colliding = false;
 	//std::cout<<"New eyex val: "<<camera.eyex + (-1 * camera.deltax * camera.speed)<<std::endl;
 	//std::cout<<"New eyez val: "<<camera.eyez + (-1 * camera.deltaz * camera.speed)<<std::endl;
 	//std::cout<<"New eyey val: "<<camera.eyey<<std::endl;
 	camera.updateDeltas(camera.deltax, camera.deltaz);
-	if((fmod(abs(yaw), 360)) >= 0 && (fmod(abs(yaw), 360) <= 180) && yaw >= 0){
-		if( //check y values here too
-		(camera.eyex + (-1 * camera.deltax * camera.speed) > (cube.xmin)) &&
-		(camera.eyex + (-1 * camera.deltax * camera.speed) < (cube.xmax)) &&
-		(camera.eyez + (-1 * camera.deltaz * camera.speed) > (cube.zmin)) &&
-		(camera.eyez + (-1 * camera.deltaz * camera.speed) < (cube.zmax)) &&
-		(camera.eyey > cube.ymin && camera.eyey < cube.ymax)
-		){
-			colliding = true;
-		}
-	} else {
-		if(
-		(camera.eyex - (-1 * camera.deltax * camera.speed) > (cube.xmin)) &&
-		(camera.eyex - (-1 * camera.deltax * camera.speed) < (cube.xmax)) &&
-		(camera.eyez - (-1 * camera.deltaz * camera.speed) > (cube.zmin)) &&
-		(camera.eyez - (-1 * camera.deltaz * camera.speed) < (cube.zmax)) &&
-		(camera.eyey > cube.ymin && camera.eyey < cube.ymax)
-		){
-			colliding = true;
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		if((fmod(abs(yaw), 360)) >= 0 && (fmod(abs(yaw), 360) <= 180) && yaw >= 0){
+			if( //check y values here too
+			(camera.eyex + (-1 * camera.deltax * camera.speed) > (cube[i].xmin)) &&
+			(camera.eyex + (-1 * camera.deltax * camera.speed) < (cube[i].xmax)) &&
+			(camera.eyez + (-1 * camera.deltaz * camera.speed) > (cube[i].zmin)) &&
+			(camera.eyez + (-1 * camera.deltaz * camera.speed) < (cube[i].zmax)) &&
+			(camera.eyey > cube[i].ymin && camera.eyey < cube[i].ymax)
+			){
+				colliding = true;
+			}
+		} else {
+			if(
+			(camera.eyex - (-1 * camera.deltax * camera.speed) > (cube[i].xmin)) &&
+			(camera.eyex - (-1 * camera.deltax * camera.speed) < (cube[i].xmax)) &&
+			(camera.eyez - (-1 * camera.deltaz * camera.speed) > (cube[i].zmin)) &&
+			(camera.eyez - (-1 * camera.deltaz * camera.speed) < (cube[i].zmax)) &&
+			(camera.eyey > cube[i].ymin && camera.eyey < cube[i].ymax)
+			){
+				colliding = true;
+			}
 		}
 	}
 	//std::cout<<"Collision: "<<colliding<<" yaw: "<<yaw<<std::endl;
 	return colliding;
 }
 
-bool checkRightCollision(Cube cube){
+bool checkRightCollision(Cube cube[]){
 	bool colliding = false;
 	//std::cout<<"New eyex val: "<<camera.eyex + (camera.deltax * camera.speed)<<std::endl;
 	//std::cout<<"New eyez val: "<<camera.eyez + (camera.deltaz * camera.speed)<<std::endl;
 	//std::cout<<"New eyey val: "<<camera.eyey<<std::endl;
 	camera.updateDeltas(camera.deltax, camera.deltaz);
-	if((fmod(abs(yaw), 360)) >= 0 && (fmod(abs(yaw), 360) <= 180) && yaw >= 0){
-		if(
-		(camera.eyex + (camera.deltax * camera.speed) > (cube.xmin)) &&
-		(camera.eyex + (camera.deltax * camera.speed) < (cube.xmax)) &&
-		(camera.eyez + (camera.deltaz * camera.speed) > (cube.zmin)) &&
-		(camera.eyez + (camera.deltaz * camera.speed) < (cube.zmax)) &&
-		(camera.eyey > cube.ymin && camera.eyey < cube.ymax)
-		){
-			colliding = true;
-		}
-	} else {
-		if(
-		(camera.eyex - (camera.deltax * camera.speed) > (cube.xmin)) &&
-		(camera.eyex - (camera.deltax * camera.speed) < (cube.xmax)) &&
-		(camera.eyez - (camera.deltaz * camera.speed) > (cube.zmin)) &&
-		(camera.eyez - (camera.deltaz * camera.speed) < (cube.zmax)) &&
-		(camera.eyey > cube.ymin && camera.eyey < cube.ymax)
-		){
-			colliding = true;
+	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
+		if((fmod(abs(yaw), 360)) >= 0 && (fmod(abs(yaw), 360) <= 180) && yaw >= 0){
+			if(
+			(camera.eyex + (camera.deltax * camera.speed) > (cube[i].xmin)) &&
+			(camera.eyex + (camera.deltax * camera.speed) < (cube[i].xmax)) &&
+			(camera.eyez + (camera.deltaz * camera.speed) > (cube[i].zmin)) &&
+			(camera.eyez + (camera.deltaz * camera.speed) < (cube[i].zmax)) &&
+			(camera.eyey > cube[i].ymin && camera.eyey < cube[i].ymax)
+			){
+				colliding = true;
+			}
+		} else {
+			if(
+			(camera.eyex - (camera.deltax * camera.speed) > (cube[i].xmin)) &&
+			(camera.eyex - (camera.deltax * camera.speed) < (cube[i].xmax)) &&
+			(camera.eyez - (camera.deltaz * camera.speed) > (cube[i].zmin)) &&
+			(camera.eyez - (camera.deltaz * camera.speed) < (cube[i].zmax)) &&
+			(camera.eyey > cube[i].ymin && camera.eyey < cube[i].ymax)
+			){
+				colliding = true;
+			}
 		}
 	}
 	//std::cout<<"Collision: "<<colliding<<" yaw: "<<yaw<<std::endl;
@@ -412,29 +553,25 @@ void keyPressed(unsigned char key, int x, int y){
 			oldx = camera.eyex;
 			oldy = camera.eyey;
 			oldz = camera.eyez;
-			if(not checkForwardCollision(shape2) &&
-			not checkForwardCollision(shape1)){
+			if(not checkForwardCollision(collision_shapes) && not noclip){
 				camera.moveForward();
 			}
 			break;
 		case 's':
-			if(not checkBackwardCollision(shape2) &&
-			not checkBackwardCollision(shape1)){
+			if(not checkBackwardCollision(collision_shapes) && not noclip){
 				camera.moveBackward();
 			}
 			break;
 		case 'd':
 			if
-			(not checkRightCollision(shape2) &&
-			not checkRightCollision(shape1)){
+			(not checkRightCollision(collision_shapes) && not noclip){
 				camera.updateDeltas(camera.deltax, camera.deltaz);
 				camera.strafeRight(pitch, yaw);
 			}
 			break;
 		case 'a':
 			if
-			(not checkLeftCollision(shape2) &&
-			not checkLeftCollision(shape1)){
+			(not checkLeftCollision(collision_shapes) && not noclip){
 				camera.updateDeltas(camera.deltax, camera.deltaz);
 				camera.strafeLeft(pitch, yaw);
 			}
@@ -488,6 +625,14 @@ void keyPressed(unsigned char key, int x, int y){
 				glEnable(GL_LIGHTING);
 			}
 			std::cout<<lights_on<<std::endl;
+			break;
+		case 'c':
+			if(noclip){
+				noclip = false;
+			} else {
+				noclip = true;
+			}
+			std::cout<<"Clipping: "<<std::endl;
 			break;
 	}
 	
@@ -555,7 +700,7 @@ void initLighting(){
 	
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, model_ambient);
 	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, viewpoint);
-	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, model_two_side);
+	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, model_two_side); //this breaks things up into triangles for some reason
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
     glEnable(GL_RESCALE_NORMAL);
@@ -586,10 +731,10 @@ void initLighting(){
 }
 
 int main(int argc, char** argv) {
-	std::cout<<shape1.xmin<<" "<<shape1.xmax<<" "<<shape1.ymin<<" "<<shape1.ymax<<" "<<shape1.zmin<<" "<<shape1.zmax<<std::endl;
+	//std::cout<<shape1.xmin<<" "<<shape1.xmax<<" "<<shape1.ymin<<" "<<shape1.ymax<<" "<<shape1.zmin<<" "<<shape1.zmax<<std::endl;
 	std::cout<<shape2.xmin<<" "<<shape2.xmax<<" "<<shape2.ymin<<" "<<shape2.ymax<<" "<<shape2.zmin<<" "<<shape2.zmax<<std::endl;
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(720, 720);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Collision and Lighting");
@@ -597,6 +742,7 @@ int main(int argc, char** argv) {
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutKeyboardFunc(keyPressed);
 	glutPassiveMotionFunc(mouseMove);
+	glEnable(GL_DEPTH_TEST);
 	glutDisplayFunc(generateView);
 	glClearColor(0,0,0.15,1);
 	initLighting();
