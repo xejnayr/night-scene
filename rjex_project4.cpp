@@ -18,8 +18,12 @@ float sensitivity = 0.05;
 int tick = 0;
 bool lights_on = true;
 bool clipping = true;
+bool window_lights_on = false;
 
+int window_width = 720;
+int window_height = 720;
 
+GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 
 
 //TESTING THINGS HERE--------------------------
@@ -90,8 +94,8 @@ h1window2, h1window3, h1window4, h2window1,
 h2window3, h2window4, h3window1, h3window2,
 h3window4, h4window1, h4window2, h4window3};
 	
-Cube lights[] = {};
-//{h1window1};//, h2window2, h3window3, h4window4};
+Cube lights[] = 
+{h1window1};//, h2window2, h3window3, h4window4};
 
 
 double oldx = camera.eyex;
@@ -103,6 +107,7 @@ double oldz = camera.eyez;
 void generateView(){
 	glMatrixMode(GL_MODELVIEW);
 	glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
+	glLightfv(GL_LIGHT1, GL_POSITION, spot_direction);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
@@ -117,10 +122,11 @@ void generateView(){
 	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
 		collision_shapes[i].drawCube();
 	}
-	for(int i = 0; i < (sizeof(lights) / sizeof(lights[0])); i++){
-		lights[i].drawLight();
+	if(window_lights_on){
+		for(int i = 0; i < (sizeof(lights) / sizeof(lights[0])); i++){
+			lights[i].drawLight();
+		}
 	}
-	
 	glEnd();
 	
 	
@@ -279,7 +285,9 @@ void mouseMove(int x, int y){
 	//keeps pointer at the center of the screen, as a game would
 	//works well with hiding the cursor, also as a game would (usually)
 	if(tick % 10 == 0){
-		glutWarpPointer(360, 360);
+		glutWarpPointer(window_width / 2, window_width / 2);
+		//for some reason there's a problem here when I set window width higher
+		//std::cout<<window_width / 2<<" "<<window_height / 2<<std::endl;
 	}
 	if(tick % 120 == 0){ 
 		tick = 0; 
@@ -377,6 +385,9 @@ void keyPressed(unsigned char key, int x, int y){
 			}
 			std::cout<<"Clipping: "<<clipping<<std::endl;
 			break;
+		case 'k':
+			window_lights_on = !window_lights_on;
+			break;
 	}
 	
 	
@@ -433,7 +444,7 @@ void initLighting(){
     float specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
     
    
-    
+    /*
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     //glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
@@ -444,21 +455,22 @@ void initLighting(){
     int viewpoint = 0;
 	
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, model_ambient);
-	
+	*/
 	
 	
 	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, viewpoint);
 	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, model_two_side); //this breaks things up into triangles for some reason
 	
+	glEnable(GL_LIGHTING);
 	
-	
+	glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHTING);
+    
     glEnable(GL_RESCALE_NORMAL);
 	
 	//enabling blending for good effects
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
 	
 	
 	/*
@@ -492,7 +504,7 @@ int main(int argc, char** argv) {
 	std::cout<<shape2.xmin<<" "<<shape2.xmax<<" "<<shape2.ymin<<" "<<shape2.ymax<<" "<<shape2.zmin<<" "<<shape2.zmax<<std::endl;
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(720, 720);
+	glutInitWindowSize(window_width, window_height);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Collision and Lighting");
 	//initializeClasses();
