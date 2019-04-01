@@ -17,7 +17,7 @@ float pitch, yaw = 0.0;
 float sensitivity = 0.05;
 int tick = 0;
 bool lights_on = true;
-bool noclip = false;
+bool clipping = true;
 
 
 
@@ -31,7 +31,7 @@ float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 float no_shininess = 0.0f;
 float low_shininess = 5.0f;
 float high_shininess = 100.0f;
-float mat_emission[] = {1.0f, 0.2f, 0.0f, 0.0f};
+float mat_emission[] = {0.98f,0.625f,0.12f,0.0f};
 GLUquadric* quadric = gluNewQuadric();
 //----------------------------------------------
 
@@ -54,6 +54,7 @@ GLfloat blue_val[] = {0,0,1,1};
 
 Camera camera;
 float position[] = {-25.0f, -35.0f, 20.0f, 1.0f};
+float world_light_pos[] = {0.0f, 1.0f, -1.0f, 0.0f};
 
 
 Cube shape2(100,50,-100,50);
@@ -114,12 +115,12 @@ void drawLight(Cube cube){
 	
 	
 	
-	/*
+	
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
     glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
-    */
+    
     
     
     
@@ -152,42 +153,44 @@ void drawLight(Cube cube){
 	
 	
 	glBegin(GL_TRIANGLES); //setting all color values to white for now
-		glColor3f(1,0.5,0); //red, top
+		glColor3f(0.98f,0.625f,0.12f); //red, top
+			glNormal3f(0,1,0);
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(1,0.5,0); //green, right
+		glColor3f(0.98f,0.625f,0.12f); //green, right
+			glNormal3f(1,0,0);
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(1,0.5,0); //blue, front
+		glColor3f(0.98f,0.625f,0.12f); //blue, front
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
-		glColor3f(1,0.5,0); //orange, bottom
+		glColor3f(0.98f,0.625f,0.12f); //orange, bottom
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
-		glColor3f(1,0.5,0); //cyan, left
+		glColor3f(0.98f,0.625f,0.12f); //cyan, left
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
-		glColor3f(1,0.5,0); //purple, back
+		glColor3f(0.98f,0.625f,0.12f); //purple, back
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
@@ -202,50 +205,52 @@ void drawCube(Cube cube){
 	
 	glTranslatef(cube.transX, cube.transY, cube.transZ);
 	
+	/*
 	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
     glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
+	*/
 	
 	//Draw the cube here
 	//Begins at forward upper right corner
 	glBegin(GL_TRIANGLES); //setting all color values to white for now
-		glColor3f(0,0,0); //red, top
+		glColor3f(0.5,0.5,0.5); //red, top
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(0,0,0); //green, right
+		glColor3f(0.5,0.5,0.5); //green, right
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(0,0,0); //blue, front
+		glColor3f(0.5,0.5,0.5); //blue, front
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
-		glColor3f(0,0,0); //orange, bottom
+		glColor3f(0.5,0.5,0.5); //orange, bottom
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
-		glColor3f(0,0,0); //cyan, left
+		glColor3f(0.5,0.5,0.5); //cyan, left
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
-		glColor3f(0,0,0); //purple, back
+		glColor3f(0.5,0.5,0.5); //purple, back
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
@@ -314,7 +319,7 @@ void drawCube2(Cube cube){
 
 void generateView(){
 	glMatrixMode(GL_MODELVIEW);
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
@@ -568,25 +573,25 @@ void keyPressed(unsigned char key, int x, int y){
 			oldx = camera.eyex;
 			oldy = camera.eyey;
 			oldz = camera.eyez;
-			if(not checkForwardCollision(collision_shapes) && not noclip){
+			if(not checkForwardCollision(collision_shapes) || not clipping){
 				camera.moveForward();
 			}
 			break;
 		case 's':
-			if(not checkBackwardCollision(collision_shapes) && not noclip){
+			if(not checkBackwardCollision(collision_shapes) || not clipping){
 				camera.moveBackward();
 			}
 			break;
 		case 'd':
 			if
-			(not checkRightCollision(collision_shapes) && not noclip){
+			(not checkRightCollision(collision_shapes) || not clipping){
 				camera.updateDeltas(camera.deltax, camera.deltaz);
 				camera.strafeRight(pitch, yaw);
 			}
 			break;
 		case 'a':
 			if
-			(not checkLeftCollision(collision_shapes) && not noclip){
+			(not checkLeftCollision(collision_shapes) || not clipping){
 				camera.updateDeltas(camera.deltax, camera.deltaz);
 				camera.strafeLeft(pitch, yaw);
 			}
@@ -642,12 +647,12 @@ void keyPressed(unsigned char key, int x, int y){
 			std::cout<<lights_on<<std::endl;
 			break;
 		case 'c':
-			if(noclip){
-				noclip = false;
+			if(clipping){
+				clipping = false;
 			} else {
-				noclip = true;
+				clipping = true;
 			}
-			std::cout<<"Clipping: "<<std::endl;
+			std::cout<<"Clipping: "<<clipping<<std::endl;
 			break;
 	}
 	
@@ -705,20 +710,30 @@ void initLighting(){
     float specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
     
    
+   
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
+    glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
 	
-	float model_ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
+	float model_ambient[] = {0.0f, 0.0f, 0.40f, 1.0f};
     int model_two_side = 1;                                
     int viewpoint = 0;
 	
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, model_ambient);
+	
+	 
+	
 	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, viewpoint);
 	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, model_two_side); //this breaks things up into triangles for some reason
+	
+	
+	
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
     glEnable(GL_RESCALE_NORMAL);
+	
+	
+	
 	/*
 	glShadeModel(GL_SMOOTH);
 	glClearDepth(1);
