@@ -31,7 +31,7 @@ float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 float no_shininess = 0.0f;
 float low_shininess = 5.0f;
 float high_shininess = 100.0f;
-float mat_emission[] = {0.6f, 0.6f, 0.6f, 0.0f};
+float mat_emission[] = {1.0f, 0.2f, 0.0f, 0.0f};
 GLUquadric* quadric = gluNewQuadric();
 //----------------------------------------------
 
@@ -53,7 +53,9 @@ GLfloat blue_val[] = {0,0,1,1};
 //GLfloat no_shininess = 0.0f;
 
 Camera camera;
-float position[] = {25.0f, 35.0f, -20.0f, 1.0f};
+float position[] = {-25.0f, -35.0f, 20.0f, 1.0f};
+
+
 Cube shape2(100,50,-100,50);
 Cube house1(30,-15,0,-15);
 Cube house2(30,45,0,-15);
@@ -108,10 +110,23 @@ void drawLight(Cube cube){
 	
 	//glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	
+	
+	
+	
+	
+	/*
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
     glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+    */
+    
+    
+    
+    
+    
+    
+    
 	//gluSphere(quadric, 6.0f, 128, 128);
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
@@ -137,42 +152,42 @@ void drawLight(Cube cube){
 	
 	
 	glBegin(GL_TRIANGLES); //setting all color values to white for now
-		glColor3f(1,1,1); //red, top
+		glColor3f(1,0.5,0); //red, top
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(1,1,1); //green, right
+		glColor3f(1,0.5,0); //green, right
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
-		glColor3f(1,1,1); //blue, front
+		glColor3f(1,0.5,0); //blue, front
 			glVertex3f(cube.points[7][0], cube.points[7][1], cube.points[7][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
-		glColor3f(1,1,1); //orange, bottom
+		glColor3f(1,0.5,0); //orange, bottom
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[3][0], cube.points[3][1], cube.points[3][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[0][0], cube.points[0][1], cube.points[0][2]);
-		glColor3f(1,1,1); //cyan, left
+		glColor3f(1,0.5,0); //cyan, left
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[6][0], cube.points[6][1], cube.points[6][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[2][0], cube.points[2][1], cube.points[2][2]);
-		glColor3f(1,1,1); //purple, back
+		glColor3f(1,0.5,0); //purple, back
 			glVertex3f(cube.points[5][0], cube.points[5][1], cube.points[5][2]);
 			glVertex3f(cube.points[1][0], cube.points[1][1], cube.points[1][2]);
 			glVertex3f(cube.points[4][0], cube.points[4][1], cube.points[4][2]);
