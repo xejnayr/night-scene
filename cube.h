@@ -17,7 +17,13 @@ class Cube {
 		GLdouble transX;
 		GLdouble transY;
 		GLdouble transZ;
+		GLdouble r;
+		GLdouble g;
+		GLdouble b;
+		GLdouble a;
 		
-		Cube(GLdouble, GLdouble, GLdouble, GLdouble);
+		Cube(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
+		void drawCube();
+		void drawLight();
 };
 #endif
