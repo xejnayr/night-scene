@@ -30,7 +30,7 @@ GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
 float mat_ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
 float mat_ambient_color[] = {0.1f, 0.1f, 0.025f, 1.0f};
-float mat_diffuse[] = {0.1f, 0.5f, 0.8f, 1.0f};
+
 float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 float no_shininess = 0.0f;
 float low_shininess = 5.0f;
@@ -58,13 +58,23 @@ GLfloat blue_val[] = {0,0,1,1};
 
 Camera camera;
 float position[] = {-25.0f, -35.0f, 20.0f, 1.0f};
-float world_light_pos[] = {0.0f, -1.0f, -1.0f, 0.0f};
+
+
+
+
+
+//importa stuff--------------------------------------------------------------------------
+float world_light_pos[] = {1.0f, 1.0f, 0.0f, 0.0f};
+float mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+
+
+//----------------------------------------------------------------------------------------
 
 
 Cube shape2(100,50,-100,50,0,0,0,1);
-Cube house1(30,-15,0,-15,0,0,0,1);
-Cube house2(30,45,0,-15,0,0,0,1);
-Cube house3(30,-15,0,45,0,0,0,1);
+Cube house1(30,-15,0,-15,1,1,1,1);
+Cube house2(30,45,0,-15,1,1,1,1);
+Cube house3(30,-15,0,45,1,1,1,1);
 Cube house4(30,45,0,45,0,0,0,1);
 
 Cube h1window1(8,-14.7,5,-19,1,1,1,0); //light
@@ -106,10 +116,11 @@ double oldz = camera.eyez;
 
 void generateView(){
 	glMatrixMode(GL_MODELVIEW);
-	glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
-	glLightfv(GL_LIGHT1, GL_POSITION, spot_direction);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	//glLightfv(GL_LIGHT1, GL_POSITION, spot_direction);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, mat_diffuse);
 	glLoadIdentity();
 	
 	//Don't forget gluLookAt ...
@@ -118,6 +129,12 @@ void generateView(){
 	camera.upx, camera.upy, camera.upz);
 	//gluPerspective( 90.0, 1.0, 1.0, 200.0 );
 	
+	/*
+	glPushMatrix();
+	glTranslatef(0,10,-75);
+	glutSolidSphere (1.0, 20, 16);
+	glPopMatrix();
+	*/ //sphere example
 	
 	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
 		collision_shapes[i].drawCube();
@@ -386,7 +403,13 @@ void keyPressed(unsigned char key, int x, int y){
 			std::cout<<"Clipping: "<<clipping<<std::endl;
 			break;
 		case 'k':
-			window_lights_on = !window_lights_on;
+			if(window_lights_on){
+				glDisable(GL_LIGHT1);
+				window_lights_on = false;
+			} else {
+				glEnable(GL_LIGHT1);
+				window_lights_on = true;
+			}
 			break;
 	}
 	
@@ -457,20 +480,36 @@ void initLighting(){
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, model_ambient);
 	*/
 	
-	
-	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, viewpoint);
-	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, model_two_side); //this breaks things up into triangles for some reason
-	
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	
 	glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHT0);
+    //glEnable(GL_LIGHT1);
     
-    glEnable(GL_RESCALE_NORMAL);
+    
 	
 	//enabling blending for good effects
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //need these for blending and shading
+	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_RESCALE_NORMAL); //not sure why this
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	
+	
+	
+	/*
+	GLfloat mat_specular2[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_shininess2[] = { 50.0 };
+    GLfloat light_position2[] = { -1.0, -1.0, -1.0, 0.0 };
+
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular2);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess2);
+    glLightfv(GL_LIGHT2, GL_POSITION, light_position2);
+    glEnable(GL_LIGHT2);
+	*/
 	
 	
 	/*
@@ -478,10 +517,9 @@ void initLighting(){
 	glClearDepth(1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
-	glEnable(GL_COLOR_MATERIAL);
+	
 	glEnable(GL_NORMALIZE);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_mat);
-	
 	
 	glLightfv(GL_LIGHT0, GL_AMBIENT, no_val);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_val);
@@ -489,14 +527,8 @@ void initLighting(){
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient_val);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 0);
-	
 	*/
-	
-	
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_val);
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_val);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, specular_val);
-	//glLightfv(GL_LIGHT0, GL_POSITION, position_val);
+
 }
 
 int main(int argc, char** argv) {
@@ -511,7 +543,8 @@ int main(int argc, char** argv) {
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutKeyboardFunc(keyPressed);
 	glutPassiveMotionFunc(mouseMove);
-	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	glutDisplayFunc(generateView);
 	glClearColor(0,0,0.15,1);
 	initLighting();

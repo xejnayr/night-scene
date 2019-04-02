@@ -104,30 +104,38 @@ void Cube::drawLight(){
 	
 	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
 	//glLightfv(GL_LIGHT1);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, mat_ambient);
+	
+	
+	/*
+	glLightfv(GL_LIGHT1, GL_AMBIENT, no_mat);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_diffuse);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, mat_specular);
 	glLightfv(GL_LIGHT1, GL_EMISSION, mat_emission);
+	*/
+	
+	
 	//glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, t1);
 	//glLightfv(GL_LIGHT1, GL_LINEAR_ATTENUATION, t2);
 	//glLightfv(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, t3);
 	
 	
 	
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
-	glEnable(GL_LIGHT1);
 	
 	
 	
-	/*
+	
+	
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
     glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
-    */
     
+    /*
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1.5);
+	*/
+	glEnable(GL_LIGHT1);
     
 
     
