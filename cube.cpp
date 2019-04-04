@@ -73,96 +73,40 @@ Cube::Cube(GLdouble size, GLdouble tx, GLdouble ty, GLdouble tz, GLdouble ir, GL
 	*/ 
 }
 
-void Cube::drawLight(){
+void Cube::drawLight(GLfloat rotation){
 	float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
 	float mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
 	float mat_ambient_color[] = {0.1f, 0.1f, 0.025f, 1.0f};
-	float mat_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+	float mat_diffuse[] = {0.2, 0.2, 0.2, 1.0};
 	float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	float no_shininess = 0.0f;
+	GLfloat no_shininess = 0.0f;
 	float low_shininess = 5.0f;
 	float high_shininess = 100.0f;
-	float mat_emission[] = {0.98,0.625,0.12,0.0};
+	float mat_emission[] = {0.245f,0.1563f,0.03f,0.0};
 	
 	
+	float window_light_dir[] = {1,0,0,0};
+	float window_light_pos[] = {8.0f,-14.7f,5.0f,1.0f};
+	float mat_window_light[] = {0.245f,0.1563f,0.03f,1.0f};
 	
+	
+	glTranslatef(transX, transY, transZ);
 	glPushMatrix();
+	glTranslatef(transX * -1, transY * -1, transZ * -1);
+	glRotatef(rotation,1,0,0);
 	glTranslatef(transX, transY, transZ);
 	
 	
-	/*
+	//glLightfv(GL_LIGHT2, GL_AMBIENT, no_mat);
+	//glLightfv(GL_LIGHT2, GL_DIFFUSE, mat_window_light);
+	//glLightfv(GL_LIGHT2, GL_SPECULAR, mat_diffuse);
+	
+	
 	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
-    glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
-	*/
-	
-	//glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	
-	
-	
-	GLfloat spot_direction[] = { -1.0, -1.0, 0.0 };
-	//glLightfv(GL_LIGHT1);
-	
-	
-	/*
-	glLightfv(GL_LIGHT1, GL_AMBIENT, no_mat);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, mat_specular);
-	glLightfv(GL_LIGHT1, GL_EMISSION, mat_emission);
-	*/
-	
-	
-	//glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, t1);
-	//glLightfv(GL_LIGHT1, GL_LINEAR_ATTENUATION, t2);
-	//glLightfv(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, t3);
-	
-	
-	
-	
-	
-	
-	
-	
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
-    glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
-    
-    /*
-    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1.5);
-	*/
-	glEnable(GL_LIGHT1);
-    
-
-    
-    
-	//gluSphere(quadric, 6.0f, 128, 128);
-	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-	
-	//glMaterialfv(GL_FRONT, GL_AMBIENT, blue_val);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, diffuse_val);
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, blue_val);
-	//glMaterialf(GL_FRONT, GL_SHININESS, low_shininess);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, blue_val);
-	
-	//glColor3f(0,0,1);
-	
-	//glMaterialfv(GL_FRONT, GL_DIFFUSE, light_mat);
-	//glMaterialfv(GL_FRONT, GL_POSITION, light_dir);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, light_mat);
-	
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_mat);
-	//glLightfv(GL_LIGHT0, GL_POSITION, light_dir);
-	
-	//Draw the cube here
-	//Begins at forward upper right corner
-	
-	
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+	//glMaterialfv(GL_FRONT, GL_SHININESS, no_shininess);
+	glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
 	
 	glBegin(GL_TRIANGLES); //setting all color values to white for now
 		glColor4f(r, g, b, 1.0); //red, top
@@ -248,18 +192,6 @@ void Cube::drawLight(){
 }
 
 void Cube::drawCube(){
-	float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	float mat_ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
-	float mat_ambient_color[] = {0.1f, 0.1f, 0.025f, 1.0f};
-	float mat_diffuse[] = {0.1f, 0.5f, 0.8f, 1.0f};
-	float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	float no_shininess = 0.0f;
-	float low_shininess = 5.0f;
-	float high_shininess = 100.0f;
-	float mat_emission[] = {0.2f,0.2f,0.2f,0.0f};
-	
-	
-	
 	glPushMatrix();
 	glTranslatef(transX, transY, transZ);
 	

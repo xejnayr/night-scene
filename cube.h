@@ -24,6 +24,6 @@ class Cube {
 		
 		Cube(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
 		void drawCube();
-		void drawLight();
+		void drawLight(GLfloat);
 };
 #endif
