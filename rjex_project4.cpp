@@ -28,33 +28,33 @@ int window_height = 720;
 
 Camera camera;
 Cube sun(10,0,150,0,0.98,0.625,0.12,1);
-GLfloat sun_rotation = 0.0;
+GLfloat sphere_rotation = 0.0;
 
 Cube ground(100,50,-100,50,0.65,0.65,0.65,1);
 Cube house1(30,-15,0,-15,1,1,1,1);
-Cube house2(30,45,0,-15,1,1,1,1);
-Cube house3(30,-15,0,45,1,1,1,1);
-Cube house4(30,45,0,45,0.5,0.5,0.5,1);
+Cube house2(30,45,0,-15,0.8,0.8,0.8,1);
+Cube house3(30,-15,0,45,0.45,0.45,0.45,1);
+Cube house4(30,45,0,45,0.2,0.2,0.2,1);
 
-Cube h1window1(8,-14.7,5,-19,0.98,0.625,0.12,0); //light1
-Cube h1window2(8,-14.7,5,-33, 0.8,0.8,0.8,0); 
-Cube h1window3(8,-14.7,17,-19,0.8,0.8,0.8,0);
-Cube h1window4(8,-14.7,17,-33,0.8,0.8,0.8,0);
+Cube h1window1(8,-14.7,5,-19,0.85,0.85,0.85,0);  //light1
+Cube h1window2(8,-14.7,5,-33, 0.7,0.7,0.7,0); 
+Cube h1window3(8,-14.7,17,-19,0.7,0.7,0.7,0);
+Cube h1window4(8,-14.7,17,-33,0.7,0.7,0.7,0);
 
-Cube h2window1(8,-14.7,5,41,0.8,0.8,0.8,0);
-Cube h2window2(8,-14.7,5,27,0.98,0.625,0.12,0); //light2
-Cube h2window3(8,-14.7,17,41,0.8,0.8,0.8,0);
-Cube h2window4(8,-14.7,17,27,0.8,0.8,0.8,0);
+Cube h2window1(8,-14.7,5,41,0.7,0.7,0.7,0);
+Cube h2window2(8,-14.7,5,27,0.85,0.85,0.85,0);  //light2
+Cube h2window3(8,-14.7,17,41,0.7,0.7,0.7,0);
+Cube h2window4(8,-14.7,17,27,0.7,0.7,0.7,0);
 
-Cube h3window1(8,22.7,5,-19,0.8,0.8,0.8,0);
-Cube h3window2(8,22.7,5,-33,0.8,0.8,0.8,0);
-Cube h3window3(8,22.7,17,-19,0.98,0.625,0.12,0); //light3
-Cube h3window4(8,22.7,17,-33,0.8,0.8,0.8,0);
+Cube h3window1(8,22.7,5,-19,0.7,0.7,0.7,0);
+Cube h3window2(8,22.7,5,-33,0.7,0.7,0.7,0);
+Cube h3window3(8,22.7,17,-19,0.85,0.85,0.85,0);  //light3
+Cube h3window4(8,22.7,17,-33,0.7,0.7,0.7,0);
 
-Cube h4window1(8,22.7,5,41,0.8,0.8,0.8,0);
-Cube h4window2(8,22.7,5,27,0.8,0.8,0.8,0);
-Cube h4window3(8,22.7,17,41,0.8,0.8,0.8,0);
-Cube h4window4(8,22.7,17,27,0.98,0.625,0.12,0); //light4
+Cube h4window1(8,22.7,5,41,0.7,0.7,0.7,0);
+Cube h4window2(8,22.7,5,27,0.7,0.7,0.7,0);
+Cube h4window3(8,22.7,17,41,0.7,0.7,0.7,0);
+Cube h4window4(8,22.7,17,27,0.85,0.85,0.85,0); //light4
 
 
 Cube collision_shapes[] =
@@ -75,7 +75,7 @@ double oldz = camera.eyez;
 //GLfloat light1_diffuse[] = { 0.98,0.625,0.12, 1.0 };
 
 GLfloat window_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-GLfloat window_diffuse[] = { 0.065f,0.04f,0.008f,1.0};
+GLfloat window_diffuse[] = { 0.2f,0.08f,0.016f,1.0};
 GLfloat window_specular[] = { 0.0, 0.0, 0.0, 1.0 };
 
 GLfloat window_light_pos[] = {-14.6,5,-33,1};
@@ -91,10 +91,13 @@ GLfloat window_light_pos4[] = {14.6,24,27,1};
 GLfloat spot_dir4[] = {-1.0, -1.0, 0.0 };
 
 GLfloat world_light_pos[] = {1.0f, 1.0f, 1.0f, 0.0f};
-GLfloat sun_light_pos[] = {0,150,0,0};
+GLfloat sphere_light_pos[] = {0,150,0,0};
 
 //Sphere light value
-GLfloat sphere_diffuse[] = {1.0,1.0,1,1.0};
+GLfloat sphere_diffuse[] = {0.35,0.35,0.5,1.0};
+
+//GLfloat sky_color[] = {0.0,0.05,0.15};
+GLfloat sky_color[] = {0.0,0.2,0.6};
 
 void drawSphere(){
 	glTranslatef(0,150,0);
@@ -105,17 +108,46 @@ void drawSphere(){
 		
 		glPushMatrix();
 			glTranslatef(0, -150, 0);
-			glRotatef(sun_rotation,1,0,0);
+			glRotatef(sphere_rotation,1,0,0);
 			glTranslatef(0, 150, 0);
 			glLightfv(GL_LIGHT5, GL_DIFFUSE, sphere_diffuse);
-			glLightfv(GL_LIGHT5, GL_POSITION, sun_light_pos);
+			glLightfv(GL_LIGHT5, GL_POSITION, sphere_light_pos);
 			glColor4f(1,1,1,1);
 			glutSolidSphere (10, 40, 40);
 		glPopMatrix();
 		
 	glPopMatrix();
 	
-	sun_rotation += 1;
+	if((sphere_rotation >= 0) && (sphere_rotation < 180)){
+		sky_color[1] = sky_color[1] - (0.000416667 * 2);
+		sky_color[2] = sky_color[2] - (0.00125 * 2);
+		glEnable(GL_LIGHT1);
+		glEnable(GL_LIGHT2);
+		glEnable(GL_LIGHT3);
+		glEnable(GL_LIGHT4);
+		window_lights_on = true;
+		//std::cout<<sky_color[1]<<" "<<sky_color[2]<<std::endl;
+	} else {
+		if(sphere_rotation >= 270){
+			glDisable(GL_LIGHT1);
+			glDisable(GL_LIGHT2);
+			glDisable(GL_LIGHT3);
+			glDisable(GL_LIGHT4);
+		}
+		window_lights_on = false;
+		sky_color[1] = sky_color[1] + (0.000416667 * 2);
+		sky_color[2] = sky_color[2] + (0.00125 * 2);
+		//std::cout<<sky_color[1]<<" "<<sky_color[2]<<std::endl;
+	}
+	
+	
+	
+	glClearColor(sky_color[0],sky_color[1],sky_color[2],1);
+	
+	sphere_rotation += 0.5;
+	if(sphere_rotation == 360){
+		sphere_rotation = 0;
+	}
 }
 
 void drawLights() {
@@ -492,10 +524,7 @@ void idleFunction(){
 	camera.centerx = cos(yaw * M_PI / 180) * cos(pitch * M_PI / 180) + camera.eyex;
 	camera.centery = sin(pitch * M_PI / 180) + camera.eyey;
 	camera.centerz = sin(yaw * M_PI / 180) * cos(pitch * M_PI / 180) + camera.eyez;
-	
-	//position_val[0] = camera.eyex;
-	//position_val[1] = camera.eyey;
-	//position_val[2] = camera.eyez;
+
 
 	generateView();
 }
@@ -519,10 +548,6 @@ void initLighting(){
 	glEnable(GL_RESCALE_NORMAL); //not sure why this
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	
-	
-	
-
 }
 
 int main(int argc, char** argv) {
@@ -537,7 +562,7 @@ int main(int argc, char** argv) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glutDisplayFunc(generateView);
-	glClearColor(0,0,0.15,1);
+	
 	initLighting();
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idleFunction);
