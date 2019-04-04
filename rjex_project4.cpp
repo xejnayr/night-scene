@@ -16,69 +16,17 @@ int drawMode = 0;
 float pitch, yaw = 0.0;
 float sensitivity = 0.05;
 int tick = 0;
+
 bool lights_on = true;
 bool clipping = true;
 bool window_lights_on = true;
 bool world_light_on = true;
-bool big_cone = true;
 bool sunlight_on = true;
-
 
 int window_width = 720;
 int window_height = 720;
 
-
-
-
-//TESTING THINGS HERE--------------------------
-float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
-float mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
-float mat_ambient_color[] = {0.1f, 0.1f, 0.025f, 1.0f};
-
-float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-float no_shininess = 0.0f;
-float low_shininess = 5.0f;
-float high_shininess = 100.0f;
-float mat_emission[] = {0.2f,0.2f,0.2f,0.0f};
-GLUquadric* quadric = gluNewQuadric();
-//----------------------------------------------
-
-
-
-GLfloat no_val[] = {0,0,0,0};
-GLfloat ambient_val[] = {0,0,0,1};
-GLfloat diffuse_val[] = {1,1,1,1};
-GLfloat specular_val[] = {1,1,1,1};
-GLfloat position_val[] = {0,0,0,0};
-GLfloat static_pos[] = {1,1,1,0};
-GLfloat light_mat[] = {0.95,0.4,0,1};
-//GLfloat low_shininess = 5.0f;
-GLfloat light_dir[] = {0,0,-1,0};
-GLfloat light_pos[] = {1,1,0,0};
-GLfloat model_val[] = {0.2,0.2,0.2,1};
-
-GLfloat blue_val[] = {0,0,1,1};
-//GLfloat no_shininess = 0.0f;
-
 Camera camera;
-//float position[] = {-25.0f, -35.0f, 20.0f, 1.0f};
-
-
-
-
-
-//important stuff--------------------------------------------------------------------------
- //direction that the light comes from
-float mat_diffuse[] = {0.3f, 0.3f, 0.40f, 1.0f};
-float window_light_dir[] = {-1,1,0};
-//float window_light_pos[] = {-14.6f,5.0f,-33.0f,1.0f};
-float mat_window_light[] = {0.245f,0.1563f,0.03f,1.0f};
-
-
-
-//----------------------------------------------------------------------------------------
-
-
 Cube sun(10,0,150,0,0.98,0.625,0.12,1);
 GLfloat sun_rotation = 0.0;
 
@@ -88,25 +36,25 @@ Cube house2(30,45,0,-15,1,1,1,1);
 Cube house3(30,-15,0,45,1,1,1,1);
 Cube house4(30,45,0,45,0.5,0.5,0.5,1);
 
-Cube h1window1(8,-14.7,5,-19,0.98,0.625,0.12,0); //light
+Cube h1window1(8,-14.7,5,-19,0.98,0.625,0.12,0); //light1
 Cube h1window2(8,-14.7,5,-33, 0.8,0.8,0.8,0); 
 Cube h1window3(8,-14.7,17,-19,0.8,0.8,0.8,0);
 Cube h1window4(8,-14.7,17,-33,0.8,0.8,0.8,0);
 
 Cube h2window1(8,-14.7,5,41,0.8,0.8,0.8,0);
-Cube h2window2(8,-14.7,5,27,0.98,0.625,0.12,0); //light
+Cube h2window2(8,-14.7,5,27,0.98,0.625,0.12,0); //light2
 Cube h2window3(8,-14.7,17,41,0.8,0.8,0.8,0);
 Cube h2window4(8,-14.7,17,27,0.8,0.8,0.8,0);
 
 Cube h3window1(8,22.7,5,-19,0.8,0.8,0.8,0);
 Cube h3window2(8,22.7,5,-33,0.8,0.8,0.8,0);
-Cube h3window3(8,22.7,17,-19,0.98,0.625,0.12,0); //light
+Cube h3window3(8,22.7,17,-19,0.98,0.625,0.12,0); //light3
 Cube h3window4(8,22.7,17,-33,0.8,0.8,0.8,0);
 
 Cube h4window1(8,22.7,5,41,0.8,0.8,0.8,0);
 Cube h4window2(8,22.7,5,27,0.8,0.8,0.8,0);
 Cube h4window3(8,22.7,17,41,0.8,0.8,0.8,0);
-Cube h4window4(8,22.7,17,27,0.98,0.625,0.12,0); //light
+Cube h4window4(8,22.7,17,27,0.98,0.625,0.12,0); //light4
 
 
 Cube collision_shapes[] =
@@ -126,9 +74,9 @@ double oldz = camera.eyez;
 
 //GLfloat light1_diffuse[] = { 0.98,0.625,0.12, 1.0 };
 
-GLfloat light1_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-GLfloat light1_diffuse[] = { 0.25f,0.15,0.03f,1.0};
-GLfloat light1_specular[] = { 0.0, 0.0, 0.0, 1.0 };
+GLfloat window_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+GLfloat window_diffuse[] = { 0.065f,0.04f,0.008f,1.0};
+GLfloat window_specular[] = { 0.0, 0.0, 0.0, 1.0 };
 
 GLfloat window_light_pos[] = {-14.6,5,-33,1};
 GLfloat spot_dir[] = {1.0, -1.0, 0.0 };
@@ -145,19 +93,21 @@ GLfloat spot_dir4[] = {-1.0, -1.0, 0.0 };
 GLfloat world_light_pos[] = {1.0f, 1.0f, 1.0f, 0.0f};
 GLfloat sun_light_pos[] = {0,150,0,0};
 
-void drawSun(){
+//Sphere light value
+GLfloat sphere_diffuse[] = {1.0,1.0,1,1.0};
+
+void drawSphere(){
 	glTranslatef(0,150,0);
 	
 	//  http://glprogramming.com/red/chapter05.html
-	
-	//Need two sets of Push/PopMatrix to move the light with the sphere
+	//  Need two sets of Push/PopMatrix to move the light with the sphere
 	glPushMatrix();
 		
 		glPushMatrix();
 			glTranslatef(0, -150, 0);
 			glRotatef(sun_rotation,1,0,0);
 			glTranslatef(0, 150, 0);
-			glLightfv(GL_LIGHT5, GL_DIFFUSE, mat_diffuse);
+			glLightfv(GL_LIGHT5, GL_DIFFUSE, sphere_diffuse);
 			glLightfv(GL_LIGHT5, GL_POSITION, sun_light_pos);
 			glColor4f(1,1,1,1);
 			glutSolidSphere (10, 40, 40);
@@ -168,96 +118,46 @@ void drawSun(){
 	sun_rotation += 1;
 }
 
-void generateView(){
-	glMatrixMode(GL_MODELVIEW);
+void drawLights() {
+	//Display world lighting
 	
-	//glLightfv(GL_LIGHT1, GL_POSITION, spot_direction);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, mat_diffuse);
+	//glLightfv(GL_LIGHT0, GL_POSITION, world_light_pos);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, mat_diffuse);
 	
 	
-	//glLightfv(GL_LIGHT1, GL_POSITION, window_light_dir);
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, mat_window_light);
-	
-	
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, window_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, window_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, window_specular);
 	glLightfv(GL_LIGHT1, GL_POSITION, window_light_pos);
 	
-	//glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
-	//glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_dir);
-	//glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
-	
-	glLightfv(GL_LIGHT2, GL_AMBIENT, light1_ambient);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT2, GL_AMBIENT, window_ambient);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, window_diffuse);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, window_specular);
 	glLightfv(GL_LIGHT2, GL_POSITION, window_light_pos2);
 	
-	//glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 45.0);
-	//glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_dir2);
-	//glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 2.0);
-	
-	
-	glLightfv(GL_LIGHT3, GL_AMBIENT, light1_ambient);
-	glLightfv(GL_LIGHT3, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT3, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT3, GL_AMBIENT, window_ambient);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, window_diffuse);
+	glLightfv(GL_LIGHT3, GL_SPECULAR, window_specular);
 	glLightfv(GL_LIGHT3, GL_POSITION, window_light_pos3);
 	
-	
-	//glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, 45.0);
-	//glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, spot_dir3);
-	//glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, 2.0);
-	
-	
-	glLightfv(GL_LIGHT4, GL_AMBIENT, light1_ambient);
-	glLightfv(GL_LIGHT4, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT4, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT4, GL_AMBIENT, window_ambient);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, window_diffuse);
+	glLightfv(GL_LIGHT4, GL_SPECULAR, window_specular);
 	glLightfv(GL_LIGHT4, GL_POSITION, window_light_pos4);
+}
+
+void generateView(){
+	glMatrixMode(GL_MODELVIEW);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	
-	//glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, 45.0);
-	//glLightfv(GL_LIGHT4, GL_SPOT_DIRECTION, spot_dir4);
-	//glLightf(GL_LIGHT4, GL_SPOT_EXPONENT, 2.0);
-	
-	
-	drawSun();
-	
-	
-	//These don't work for some reason
-	//glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
-	//glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
-	//glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
-	
-	/*
-	if(big_cone){
-		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 70.0);
-	} else {
-		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
-	}
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction2);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
-	*/
-	
-	//glLightfv(GL_LIGHT1, GL_EMISSION, mat_window_light);
-	
-	
-	
+	drawLights();
+	drawSphere();	
 	glLoadIdentity();
 	
-	//Don't forget gluLookAt ...
+	//gluLookAt - sets camera values
 	gluLookAt(camera.eyex, camera.eyey, camera.eyez,
 	camera.centerx, camera.centery, camera.centerz,
 	camera.upx, camera.upy, camera.upz);
-	
-	
-	/*
-	glPushMatrix();
-	glTranslatef(0,10,-75);
-	glutSolidSphere (1.0, 20, 16);
-	glPopMatrix();
-	*/ //sphere example
 	
 	
 	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
@@ -267,16 +167,18 @@ void generateView(){
 		lights[i].drawCube();
 	}
 	
-	//sun.drawLight(sun_rotation);
 	glEnd();
-	
-	
-	
-	
 	glutSwapBuffers();
 }
 
+/*
+ * General collision note - collision is checked before movement.
+ * If I would collide with something by making a move, then the move is not made.
+ * Check this by performing the move calculations, then seeing whether the
+ * result is inside of an object.
+ */
 bool checkCenterCollision(Cube cube){
+	//Check if the area that the camera is looking at is colliding with anything
 	bool colliding = false;
 	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
 		if((camera.centerx > cube.xmin && camera.centerx < cube.xmax &&
@@ -289,6 +191,7 @@ bool checkCenterCollision(Cube cube){
 }
 
 bool checkEyeCollision(Cube cube){
+	//Check if the camera itself is colliding with anything
 	bool colliding = false;
 	for(int i = 0; i < (sizeof(collision_shapes) / sizeof(collision_shapes[0])); i++){
 		if((camera.eyex > cube.xmin && camera.eyex < cube.xmax &&
@@ -419,7 +322,6 @@ void mouseMove(int x, int y){
 	if(tick % 10 == 0){
 		glutWarpPointer(window_width / 2, window_width / 2);
 		//for some reason there's a problem here when I set window width higher
-		//std::cout<<window_width / 2<<" "<<window_height / 2<<std::endl;
 	}
 	if(tick % 120 == 0){ 
 		tick = 0; 
@@ -484,6 +386,7 @@ void keyPressed(unsigned char key, int x, int y){
 			//std::cout<<drawMode<<std::endl;
 			break;
 		case 't':
+			//Printing camera coordinates and yaw for debug purposes
 			std::cout<<"centerx: "<<camera.centerx<<" centery: "<<camera.centery<<" centerz: "<<camera.centerz<<std::endl;
 			std::cout<<"eyex: "<<camera.eyex<<" eyey: "<<camera.eyey<<" eyez: "<<camera.eyez<<std::endl;
 			std::cout<<"yaw: "<<yaw<<std::endl;
@@ -499,6 +402,7 @@ void keyPressed(unsigned char key, int x, int y){
 			}
 			break;
 		case 'l':
+			//Turns off lighting altogether
 			if(lights_on){
 				lights_on = false;
 				glDisable(GL_LIGHTING);
@@ -510,6 +414,7 @@ void keyPressed(unsigned char key, int x, int y){
 			std::cout<<lights_on<<std::endl;
 			break;
 		case 'c':
+			//Switches clipping state, allow user to phase through buildings
 			if(clipping){
 				clipping = false;
 			} else {
@@ -518,16 +423,18 @@ void keyPressed(unsigned char key, int x, int y){
 			//std::cout<<"Clipping: "<<clipping<<std::endl;
 			break;
 		case '1':
+			//Pressing 1 disables the overworld lighting (Sun/Moonlight)
 			if(world_light_on){
-				glDisable(GL_LIGHT0);
+				glDisable(GL_LIGHT5);
 				world_light_on = false;
 			} else {
-				glEnable(GL_LIGHT0);
+				glEnable(GL_LIGHT5);
 				world_light_on = true;
 			}
 			std::cout<<"World light: "<<world_light_on<<" "<<"Window lights: "<<window_lights_on<<std::endl;
 			break;
 		case '2':
+			//Pressing 2 disables window lights
 			if(window_lights_on){
 				glDisable(GL_LIGHT1);
 				glDisable(GL_LIGHT2);
@@ -543,28 +450,17 @@ void keyPressed(unsigned char key, int x, int y){
 			}
 			std::cout<<"World light: "<<world_light_on<<" "<<"Window lights: "<<window_lights_on<<std::endl;
 			break;
-		case '3':
-			big_cone = !big_cone;
-			std::cout<<"big_cone: "<<big_cone<<std::endl;
-			break;
-		case '4':
-			if(sunlight_on){
-				glDisable(GL_LIGHT2);
-				sunlight_on = false;
-			} else {
-				glEnable(GL_LIGHT2);
-				sunlight_on = true;
-			}
-			break;
 	}
 	
 	
 }
 
 void reshape(GLsizei width, GLsizei height){
-	if (height == 0)
+	if(height == 0){
 		height = 1;
+	}
 	GLfloat aspect = (GLfloat)width / (GLfloat)height;
+	std::cout<<"Reshape function called. Width: "<<width<<" "<<"Height: "<<height<<std::endl;
 	
 	glViewport(0, 0, width, height);
 	
@@ -597,25 +493,19 @@ void idleFunction(){
 	camera.centery = sin(pitch * M_PI / 180) + camera.eyey;
 	camera.centerz = sin(yaw * M_PI / 180) * cos(pitch * M_PI / 180) + camera.eyez;
 	
-	position_val[0] = camera.eyex;
-	position_val[1] = camera.eyey;
-	position_val[2] = camera.eyez;
-	
-	
-	
+	//position_val[0] = camera.eyex;
+	//position_val[1] = camera.eyey;
+	//position_val[2] = camera.eyez;
+
 	generateView();
 }
 
 void initLighting(){
-	float ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
-    float diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    float specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	
 	glShadeModel(GL_SMOOTH);
-    glEnable(GL_LIGHT0); //overworld light
+    //glEnable(GL_LIGHT0); //overworld light
     glEnable(GL_LIGHT1);
     glEnable(GL_LIGHT2);
     glEnable(GL_LIGHT3);
@@ -623,8 +513,7 @@ void initLighting(){
 	glEnable(GL_LIGHT5); //sun
     
 	//enabling blending for good effects
-	glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //need these for blending and shading
+	glEnable(GL_BLEND); //need these for blending and shading
 	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA); //maybe change src to color
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_RESCALE_NORMAL); //not sure why this

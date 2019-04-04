@@ -50,29 +50,15 @@ Cube::Cube(GLdouble size, GLdouble tx, GLdouble ty, GLdouble tz, GLdouble ir, GL
 	b = ib;
 	a = ia;
 	
-	xmin = (points[1][0] + transX) - 1; //(points[1][0] + transX) * 0.03;
-	ymin = transY - 1; //(points[1][0] + transY) * 0.03;
-	zmin = (points[7][2] + transZ) - 1; //(points[1][0] + transZ) * 0.03;
-	xmax = transX + 1; //(points[1][0] + transX) * 0.03;
-	ymax = (points[4][1] + transY) + 1; //(points[1][0] + transY) * 0.03;
-	zmax = transZ + 1; //(points[1][0] + transZ) * 0.03;
-	
-	/*
-	xmin = 0.95 * (points[1][0] + transX);
-	ymin = 0.95 * transY;
-	zmin = 0.95 * (points[7][2] + transZ);
-	xmax = 1.05 * transX;
-	ymax = 1.05 * (points[4][1] + transY);
-	zmax = 1.05 * transZ;
-	*/
-	
-	/*
-	xmax = 1 * size + transX;
-	ymax = 1 * size + transY;
-	zmax = 1 * size + transZ;
-	*/ 
+	xmin = (points[1][0] + transX) - 1;
+	ymin = transY - 1;
+	zmin = (points[7][2] + transZ) - 1; 
+	xmax = transX + 1; 
+	ymax = (points[4][1] + transY) + 1; 
+	zmax = transZ + 1; 
 }
 
+/*   //Unnecessary for now 
 void Cube::drawLight(GLfloat rotation){
 	float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
 	float mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
@@ -96,10 +82,6 @@ void Cube::drawLight(GLfloat rotation){
 	glRotatef(rotation,1,0,0);
 	glTranslatef(transX, transY, transZ);
 	
-	
-	//glLightfv(GL_LIGHT2, GL_AMBIENT, no_mat);
-	//glLightfv(GL_LIGHT2, GL_DIFFUSE, mat_window_light);
-	//glLightfv(GL_LIGHT2, GL_SPECULAR, mat_diffuse);
 	
 	
 	glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
@@ -190,6 +172,7 @@ void Cube::drawLight(GLfloat rotation){
 	glEnd();
 	glPopMatrix();
 }
+*/
 
 void Cube::drawCube(){
 	glPushMatrix();
